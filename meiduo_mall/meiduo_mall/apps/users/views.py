@@ -1,11 +1,19 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.generics import CreateAPIView
 
 from .models import User
 
 # Create your views here.
 
+
+# url(r'^users/$', views.UserView.as_view()),
+class UserView(CreateAPIView):
+    """用户注册"""
+
+    # 指定序列器：剩下的CreateAPIView做完了
+    serializer_class = '注册的序列化器'
 
 # url(r'^mobiles/(?P<mobile>1[3-9]\d{9})/count/$', views.MobileCountView.as_view()),
 class MobileCountView(APIView):
