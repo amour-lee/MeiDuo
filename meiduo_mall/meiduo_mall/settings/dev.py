@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     'rest_framework',  # DRF
     'users.apps.UsersConfig',  # 用户模块，由用户模型类限制的此种注册方式
+    'verifications.apps.VerificationsConfig'   # 验证模块
 ]
 
 MIDDLEWARE = [
