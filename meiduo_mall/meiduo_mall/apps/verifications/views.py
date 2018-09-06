@@ -32,12 +32,18 @@ class SMSCodeView(APIView):
         sms_code = '%06d' % random.randint(0, 999999)
         logger.info(sms_code)
 
+        # redis管道:将多个redis指令放在一个管道里面，统一执行，减少redis数据库访问的频率，提升性能
+        pl = redis_conn.pipeline()
+
         # 保存短信验证码到Redis
         # redis_conn.setex('key','过期时间','value')
-        redis_conn.setex('sms_%s' % mobile, constants.SMS_CODE_REDIS_EXPIRES, sms_code)
+        pl.setex('sms_%s' % mobile, constants.SMS_CODE_REDIS_EXPIRES, sms_code)
 
         # 再在redis中添加一个发送短信的标记（值）
-        redis_conn.setex('send_flag_%s' % mobile, constants.SEND_SMS_CODE_INTERVAL, 1)
+        pl.setex('send_flag_%s' % mobile, constants.SEND_SMS_CODE_INTERVAL, 1)
+
+        # 执行管道
+        pl.execute()
 
         # 使用容联云通讯发送短信验证码
         CCP().send_template_sms(mobile, [sms_code, constants.SMS_CODE_REDIS_EXPIRES // 60], 1)
