@@ -17,8 +17,12 @@ import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+print(BASE_DIR)
 # 打印导包路径
 print(sys.path)
+
+# 为了保证应用的注册和导包正常，需要追加导包路径到'apps'
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -41,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'rest_framework',
+    'rest_framework',  # DRF
+    'users.apps.UsersConfig',  # 用户模块，由用户模型类限制的此种注册方式
 ]
 
 MIDDLEWARE = [
@@ -195,4 +200,5 @@ REST_FRAMEWORK = {
 
 # 指定默认的用户模型类
 # 注意：语法规则必须是'应用名.模型类'
+# 由于指定用户模型类的规则限制，所以注册users应用时，必须从'users.apps.UsersConfig'开始
 AUTH_USER_MODEL = 'users.User'
