@@ -33,7 +33,8 @@ SECRET_KEY = 'utu(pq*jfci3dtjzu)30pw!s9so32&db1pycnp6x3=3j=pe&$a'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# 允许哪些域名访问django
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -46,11 +47,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',  # DRF
+    'corsheaders',   # JS跨域请求问题
+
     'users.apps.UsersConfig',  # 用户模块，由用户模型类限制的此种注册方式
     'verifications.apps.VerificationsConfig'   # 验证模块
 ]
 
 MIDDLEWARE = [
+    # 放在中间件最外层的原因：跨域的问题需要在请求一开始就得到解决，所以需要优先执行，而中间件在处理请求时自上而下
+    'corsheaders.middleware.CorsMiddleware',  # 最外层的中间件
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -210,3 +215,12 @@ REST_FRAMEWORK = {
 # 注意：语法规则必须是'应用名.模型类'
 # 由于指定用户模型类的规则限制，所以注册users应用时，必须从'users.apps.UsersConfig'开始
 AUTH_USER_MODEL = 'users.User'
+
+
+# CORS：白名单
+CORS_ORIGIN_WHITELTST = (
+    '127.0.0.1:8080',
+    'localhost:8080',
+)
+CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
+
