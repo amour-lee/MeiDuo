@@ -7,7 +7,7 @@ from meiduo_mall.libs.yuntongxun.sms import CCP
 from rest_framework.response import Response
 # Create your views here.
 
-
+# 使用配置信息中的django别名，创建一个日志输出器
 logger = logging.getLogger('django')
 
 class SMSCodeView(APIView):

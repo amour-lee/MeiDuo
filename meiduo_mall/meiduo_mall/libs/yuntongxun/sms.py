@@ -41,39 +41,29 @@ _softVersion = '2013-12-26'
 #         else:
 #             print('%s:%s' % (k, v))
 
-
 class CCP(object):
-    """封装单例类发送短信验证码"""
+    """发送短信的辅助类"""
+
     def __new__(cls, *args, **kwargs):
-        # 判断_instance对像是否存在，如果存在，就不在重复的创建,直接返回；如果不存在就创建一个_instance对象
-        if not hasattr(cls, '_instance'):
+        # 判断是否存在类属性_instance，_instance是类CCP的唯一对象，即单例
+        if not hasattr(CCP, "_instance"):
             cls._instance = super(CCP, cls).__new__(cls, *args, **kwargs)
-
-            # 搭配单例让，rest对象只实例化一次
-            rest = REST(_serverIP, _serverPort, _softVersion)
-            # 给_instance单例动态的绑定一个rest属性，属性保存到额是rest对象
-            cls._instance.rest = rest
-
+            cls._instance.rest = REST(_serverIP, _serverPort, _softVersion)
             cls._instance.rest.setAccount(_accountSid, _accountToken)
             cls._instance.rest.setAppId(_appId)
-
         return cls._instance
 
-    def send_sms_code(self, to, datas, tempId):
-        """
-        单例发送短信的方法:需要单例对象才能调用的
-        :param to: 发送短信的手机
-        :param datas: ['sms_code', 短信提示过期的时间]
-        :param tempId: 默认免费的是1
-        :return: 如果发送短信成功，返回0；反之，返回-1
-        """
-        # self ： 代表CCP()初始化出来的单例_instance
-        # sendTemplateSMS : 是容联云通讯提供的发送短信的底层方法，我只借用了一下，在外面套了壳子（send_sms_code）
-        result = self.rest.sendTemplateSMS(to, datas, tempId)
 
-        if result.get('statusCode') != '000000':
-            return -1
-        else:
+    def send_template_sms(self, to, datas, temp_id):
+        """发送模板短信"""
+        # @param to 手机号码
+        # @param datas 内容数据 格式为数组 例如：{'12','34'}，如不需替换请填 ''
+        # @param temp_id 模板Id
+        result = self.rest.sendTemplateSMS(to, datas, temp_id)
+        # 如果云通讯发送短信成功，返回的字典数据result中statuCode字段的值为"000000"
+        if result.get("statusCode") == "000000":
+            # 返回0 表示发送短信成功
             return 0
-
-
+        else:
+            # 返回-1 表示发送失败
+            return -1
