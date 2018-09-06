@@ -28,6 +28,7 @@ class SMSCodeView(APIView):
         if send_flag:
             # 如果send_flag有值，说明60s内重复发送短信
             return Response({'message':'频繁发送短信'}, status=status.HTTP_400_BAD_REQUEST)
+
         # 生成短信验证码
         sms_code = '%06d' % random.randint(0, 999999)
         logger.info(sms_code)
@@ -46,7 +47,7 @@ class SMSCodeView(APIView):
         pl.execute()
 
         # 使用容联云通讯发送短信验证码
-        CCP().send_template_sms(mobile, [sms_code, constants.SMS_CODE_REDIS_EXPIRES // 60], 1)
+        # CCP().send_template_sms(mobile, [sms_code, constants.SMS_CODE_REDIS_EXPIRES // 60], 1)
 
         # 响应结果
         return Response({'message':'OK'})

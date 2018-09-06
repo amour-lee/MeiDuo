@@ -3,13 +3,13 @@
 from .CCPRestSDK import REST
 
 # 说明：主账号，登陆云通讯网站后，可在"控制台-应用"中看到开发者主账号ACCOUNT SID
-_accountSid = '8aaf070862181ad5016236f3bcc811d5'
+_accountSid = '8a216da8653147e6016539656ae1053d'
 
 # 说明：主账号Token，登陆云通讯网站后，可在控制台-应用中看到开发者主账号AUTH TOKEN
-_accountToken = '4e831592bd464663b0de944df13f16ef'
+_accountToken = '3d7fceb6494f4cca93629f78d54c2dd5'
 
 # 请使用管理控制台首页的APPID或自己创建应用的APPID
-_appId = '8aaf070862181ad5016236f3bd2611dc'
+_appId = '8a216da8653147e6016539656b340543'
 
 # 说明：请求地址，生产环境配置成app.cloopen.com
 _serverIP = 'sandboxapp.cloopen.com'
@@ -70,6 +70,3 @@ class CCP(object):
             return -1
 
 
-# if __name__ == '__main__':
-#     # 注意： 测试的短信模板编号为1
-#     CCP().send_template_sms('17600992168', ['1234', 5], 1)
